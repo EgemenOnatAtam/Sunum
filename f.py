@@ -62,7 +62,6 @@ def create_3d_scatter(df, highlight_country=None):
     )
     
     fig = go.Figure(data=traces, layout=layout)
-    fig.update_layout(height=600)  # Adjust the height of the plot if necessary
     return fig
 
 # Streamlit application layout
@@ -71,9 +70,13 @@ st.title("Alcohol Consumption Clustering")
 # Sidebar for controls
 st.sidebar.title("Controls")
 selected_dataset_name = st.sidebar.selectbox('Choose a dataset', ('drinks', 'drinks_without_3'))
+selected_country = st.sidebar.selectbox('Select a country to highlight', ['None'] + country_list)
 
 # Load the data
 data = load_data(f'{selected_dataset_name}.csv')
+
+# Dropdown for selecting a country to highlight
+country_list = data['country'].unique().tolist()
 
 # Perform K-Means clustering on the selected dataset
 cluster_labels, kmeans_model = apply_kmeans(data)
@@ -81,22 +84,15 @@ cluster_labels, kmeans_model = apply_kmeans(data)
 # Prepare data for visualization
 visualization_data = prepare_visualization_data(data, cluster_labels)
 
-# Dropdown for selecting a country to highlight
-country_list = visualization_data['country'].unique().tolist()
-selected_country = st.sidebar.selectbox('Select a country to highlight', ['None'] + country_list)
-
 # If a country is selected, pass it to the create_3d_scatter function to highlight it
 fig = create_3d_scatter(visualization_data, highlight_country=selected_country if selected_country != 'None' else None)
 
-# Layout for displaying dataset and plot
-col1, col2 = st.columns([1, 2])  # Adjust the ratio between the dataset and the plot
-with col1:
-    st.write(f"Displaying dataset: {selected_dataset_name}")
-    st.dataframe(data.style.highlight_max(axis=0), height=600)  # Adjust the height of the dataframe if necessary
+# Display dataset and plot vertically
+st.write(f"Displaying dataset: {selected_dataset_name}")
+st.dataframe(data)
 
-with col2:
-    st.write(f"3D Scatter Plot for {selected_dataset_name}")
-    st.plotly_chart(fig, use_container_width=True)
+st.write(f"3D Scatter Plot for {selected_dataset_name}")
+st.plotly_chart(fig, use_container_width=True)
 
 # Show cluster centers if interested
 if st.sidebar.checkbox('Show cluster centers'):
