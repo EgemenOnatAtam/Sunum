@@ -64,13 +64,10 @@ def create_3d_scatter(df, highlight_country=None):
 st.title("Alcohol Consumption Clustering")
 
 # Dropdown for dataset selection
-selected_dataset_name = st.selectbox('Choose a dataset', ('drinks', 'drinks_without_3'))
+selected_dataset_name = st.sidebar.selectbox('Choose a dataset', ('drinks', 'drinks_without_3'))
 
 # Depending on the selected dataset, load it
-if selected_dataset_name == 'drinks':
-    data = load_data('drinks.csv')
-elif selected_dataset_name == 'drinks_without_3':
-    data = load_data('drinks_without_3.csv')
+data = load_data(f'{selected_dataset_name}.csv')
 
 # Perform K-Means clustering on the selected dataset
 cluster_labels, kmeans_model = apply_kmeans(data)
@@ -80,22 +77,22 @@ visualization_data = prepare_visualization_data(data, cluster_labels)
 
 # Dropdown for selecting a country to highlight
 country_list = visualization_data['country'].unique().tolist()
-selected_country = st.selectbox('Select a country to highlight', ['None'] + country_list)
-
-# Display the selected dataset
-st.write(f"Displaying dataset: {selected_dataset_name}")
-st.dataframe(data)
+selected_country = st.sidebar.selectbox('Select a country to highlight', ['None'] + country_list)
 
 # If a country is selected, pass it to the create_3d_scatter function to highlight it
-if selected_country != 'None':
-    fig = create_3d_scatter(visualization_data, highlight_country=selected_country)
-else:
-    fig = create_3d_scatter(visualization_data)
+fig = create_3d_scatter(visualization_data, highlight_country=selected_country if selected_country != 'None' else None)
 
-# Display the plot
-st.plotly_chart(fig, use_container_width=True)
+# Layout for displaying dataset and plot side by side
+col1, col2 = st.columns(2)
+with col1:
+    st.write(f"Displaying dataset: {selected_dataset_name}")
+    st.dataframe(data)
+
+with col2:
+    st.write(f"3D Scatter Plot for {selected_dataset_name}")
+    st.plotly_chart(fig, use_container_width=True)
 
 # Show cluster centers if interested
-if st.checkbox('Show cluster centers'):
+if st.sidebar.checkbox('Show cluster centers'):
     centers = pd.DataFrame(kmeans_model.cluster_centers_, columns=['beer_servings', 'spirit_servings', 'wine_servings'])
-    st.write(centers)
+    st.sidebar.write(centers)
