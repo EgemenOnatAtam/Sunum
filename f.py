@@ -1,74 +1,81 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
-from sklearn.decomposition import PCA
-from sklearn.metrics.pairwise import cosine_similarity
+import plotly.graph_objs as go
+import numpy as np
 
-# Load the clean and unclean datasets
-@st.cache_data
-def load_data(clean=True):
-    if clean:
-        data = pd.read_csv('clean_data.csv')
-    else:
-        data = pd.read_csv('unclean_data.csv')
-    return data
+# Function to load data
+@st.cache(allow_output_mutation=True)
+def load_data(filename):
+    return pd.read_csv(filename)
 
-st.title("K-Means Kümeleme Analizi Uygulaması")
+# Perform K-Means clustering
+def apply_kmeans(df, n_clusters=3):
+    kmeans = KMeans(n_clusters=n_clusters, init='k-means++', random_state=42)
+    numerical_data = df.select_dtypes(include=[np.number])
+    y_kmeans = kmeans.fit_predict(numerical_data)
+    return y_kmeans, kmeans
 
-# Sidebar for user input
-clean_option = st.sidebar.checkbox('Temizlenmiş Veriyi Göster', value=True)
-unclean_option = st.sidebar.checkbox('Temizlenmemiş Veriyi Göster', value=False)
-perform_kmeans = st.sidebar.checkbox('K-Means Uygula', value=False)
+# Prepare visualization data
+def prepare_visualization_data(df, y_kmeans):
+    cluster_colors = {0: 'red', 1: 'green', 2: 'blue'}
+    df['hover_text'] = df.apply(lambda row: f"{row['country']}<br>Cluster: {y_kmeans[row.name]}", axis=1)
+    df['cluster_color'] = df.apply(lambda row: cluster_colors[y_kmeans[row.name]], axis=1)
+    return df
 
-# Initialize data
-data = None
+# Create 3D scatter plot
+def create_3d_scatter(df):
+    traces = []
+    for index, row in df.iterrows():
+        trace = go.Scatter3d(
+            x=[row['beer_servings']],
+            y=[row['spirit_servings']],
+            z=[row['wine_servings']],
+            text=[row['hover_text']],
+            name=row['country'],
+            mode='markers',
+            marker=dict(size=5, color=row['cluster_color']),
+            hovertemplate=(
+                "Country: %{text}<br>"
+                "Beer: %{x}<br>"
+                "Spirit: %{y}<br>"
+                "Wine: %{z}<br>"
+            )
+        )
+        traces.append(trace)
+    
+    layout = go.Layout(
+        title='3D Scatter Plot of Alcohol Consumption by Country',
+        scene=dict(xaxis_title='Beer Servings', yaxis_title='Spirit Servings', zaxis_title='Wine Servings'),
+        margin=dict(l=0, r=0, b=0, t=0)
+    )
+    
+    fig = go.Figure(data=traces, layout=layout)
+    return fig
 
-# Load and display the selected dataset
-if clean_option:
-    st.subheader("Temizlenmiş Veri Seti")
-    data = load_data(clean=True)
-    st.write(data)
-elif unclean_option:
-    st.subheader("Temizlenmemiş Veri Seti")
-    data = load_data(clean=False)
-    st.write(data)
+# Streamlit application layout
+st.title("Alcohol Consumption Clustering")
+selected_dataset_name = st.selectbox('Choose a dataset', ('drinks', 'drinks_without_3'))
 
-# Ensure data is loaded before proceeding
-if data is not None and perform_kmeans:
-    st.subheader("K-Means Kümeleme Analizi Sonuçları")
+# Depending on the selected dataset, load it
+if selected_dataset_name == 'drinks':
+    data = load_data('drinks.csv')
+elif selected_dataset_name == 'drinks_without_3':
+    data = load_data('drinks_without_3.csv')
 
-    # Select numerical columns for K-Means
-    X = data.select_dtypes(include=[np.number])
+# Perform K-Means clustering on the selected dataset
+cluster_labels, kmeans_model = apply_kmeans(data)
 
-    # Finding optimal number of clusters
-    n_clusters = 30
-    cost = []
-    for i in range(1, n_clusters):
-        kmean = KMeans(i)
-        kmean.fit(X)
-        cost.append(kmean.inertia_)
+# Prepare data for visualization
+visualization_data = prepare_visualization_data(data, cluster_labels)
 
-    # Applying K-Means with the optimal number of clusters (for example, 6)
-    kmean = KMeans(6)
-    kmean.fit(X)
-    labels = kmean.labels_
+# Create the 3D scatter plot
+fig = create_3d_scatter(visualization_data)
 
-    # Adding cluster information to the dataset
-    clusters = pd.concat([data, pd.DataFrame({'cluster': labels})], axis=1)
+# Display the plot
+st.plotly_chart(fig, use_container_width=True)
 
-    # Cosine similarity and PCA for visualization
-    dist = 1 - cosine_similarity(X)
-    pca = PCA(2)
-    pca.fit(dist)
-    X_PCA = pca.transform(dist)
-
-    # Visualize clusters using PCA components
-    fig, ax = plt.subplots(figsize=(20, 13))
-    colors = ['red', 'blue', 'green', 'yellow', 'orange', 'purple']
-    for i in range(6):
-        ax.scatter(X_PCA[labels == i, 0], X_PCA[labels == i, 1], s=15, c=colors[i], label=f'Cluster {i}')
-    ax.legend()
-    ax.set_title("Kümeleme Sonuçlarının Görselleştirilmesi")
-    st.pyplot(fig)
+# Show cluster centers if interested
+if st.checkbox('Show cluster centers'):
+    centers = pd.DataFrame(kmeans_model.cluster_centers_, columns=['beer_servings', 'spirit_servings', 'wine_servings'])
+    st.write(centers)
