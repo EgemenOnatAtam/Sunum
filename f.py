@@ -70,13 +70,13 @@ st.title("Alcohol Consumption Clustering")
 # Sidebar for controls
 st.sidebar.title("Controls")
 selected_dataset_name = st.sidebar.selectbox('Choose a dataset', ('drinks', 'drinks_without_3'))
-selected_country = st.sidebar.selectbox('Select a country to highlight', ['None'] + country_list)
 
 # Load the data
 data = load_data(f'{selected_dataset_name}.csv')
 
 # Dropdown for selecting a country to highlight
 country_list = data['country'].unique().tolist()
+selected_country = st.sidebar.selectbox('Select a country to highlight', ['None'] + country_list)
 
 # Perform K-Means clustering on the selected dataset
 cluster_labels, kmeans_model = apply_kmeans(data)
