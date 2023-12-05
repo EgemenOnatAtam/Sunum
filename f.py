@@ -62,6 +62,8 @@ def create_3d_scatter(df, highlight_country=None):
 
 # Streamlit application layout
 st.title("Alcohol Consumption Clustering")
+
+# Dropdown for dataset selection
 selected_dataset_name = st.selectbox('Choose a dataset', ('drinks', 'drinks_without_3'))
 
 # Depending on the selected dataset, load it
@@ -79,6 +81,10 @@ visualization_data = prepare_visualization_data(data, cluster_labels)
 # Dropdown for selecting a country to highlight
 country_list = visualization_data['country'].unique().tolist()
 selected_country = st.selectbox('Select a country to highlight', ['None'] + country_list)
+
+# Display the selected dataset
+st.write(f"Displaying dataset: {selected_dataset_name}")
+st.dataframe(data)
 
 # If a country is selected, pass it to the create_3d_scatter function to highlight it
 if selected_country != 'None':
