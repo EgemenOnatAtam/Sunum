@@ -36,8 +36,8 @@ Central African Republic,17,2,1,1.8
 Chad,15,1,1,0.4
 Chile,10,124,172,7.6
 China,79,192,8,5
-Colombia,159,76,,4.2
-Comoros,1,,1,0.1
+Colombia,159,76,0,4.2
+Comoros,1,0,1,0.1
 Congo,76,1,9,1.7
 Cook Islands,0,254,74,5.9
 Costa Rica,149,87,11,4.4
@@ -46,12 +46,12 @@ Cuba,9,17,5,4.2
 Cyprus,192,154,11,8.2
 Czech Republic,61,170,14,11.8
 North Korea,0,0,0,0
-DR Congo,2,,1,2
+DR Congo,2,0,1,2
 Denmark,224,81,278,10.4
-Djibouti,15,44,,1.1
+Djibouti,15,44,0,1.1
 Dominica,52,286,26,6.6
 Dominican Republic,19,147,9,6.2
-Ecuador,162,74,,4.2
+Ecuador,162,74,0,4.2
 Egypt,6,4,1,0.2
 El Salvador,52,69,2,2.2
 Equatorial Guinea,92,0,2,5.8
@@ -79,7 +79,7 @@ Iceland,2,61,78,6.6
 India,9,114,0,2.2
 Indonesia,5,1,0,0.1
 Iran,0,0,0,0
-Iraq,9,,0,0.2
+Iraq,9,0,0,0.2
 Ireland,1,118,165,11.4
 Israel,6,69,9,2.5
 Italy,85,42,27,6.5
@@ -116,7 +116,7 @@ Montenegro,1,114,128,4.9
 Morocco,12,6,10,0.5
 Mozambique,47,18,5,1
 Myanmar,5,1,0,0.1
-Namibia,76,,1,6.8
+Namibia,76,0,1,6.8
 Nauru,49,0,8,1
 Nepal,5,6,0,0.2
 Netherlands,251,88,190,9.4
@@ -152,7 +152,7 @@ Saudi Arabia,0,5,0,0.1
 Senegal,9,1,7,0
 Serbia,28,11,127,9.6
 Seychelles,157,25,51,4.1
-Sierra Leone,25,,2,6.7
+Sierra Leone,25,0,2,6.7
 Singapore,60,12,11,1.5
 Slovakia,196,29,116,11.4
 Slovenia,270,51,276,10.6
@@ -187,7 +187,7 @@ USA,249,158,84,8.7
 Uruguay,115,5,220,6.6
 Uzbekistan,25,101,8,2.4
 Vanuatu,21,18,11,0.9
-Venezuela,,100,,7.7
+Venezuela,,100,0,7.7
 Vietnam,111,2,1,2
 Yemen,6,0,0,0.1
 Zambia,2,19,4,2.5
