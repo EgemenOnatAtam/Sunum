@@ -57,7 +57,7 @@ El Salvador,52,69,2,2.2
 Equatorial Guinea,92,0,2,5.8
 Eritrea,18,0,0,0.5
 Estonia,224,194,59,9.5
-Ethiopia,20,,0,0.7
+Ethiopia,20,0,0,0.7
 Fiji,77,5,1,2
 Finland,26,1,97,10
 France,127,151,70,11.8
@@ -65,7 +65,7 @@ Gabon,47,98,59,8.9
 Gambia,8,0,1,2.4
 Georgia,52,100,149,5.4
 Germany,46,117,175,11
-Ghana,1,,10,1.8
+Ghana,1,0,10,1.8
 Greece,1,112,218,8
 Grenada,199,48,28,11.9
 Guatemala,5,69,2,2.2
@@ -73,7 +73,7 @@ Guinea,9,0,2,0.2
 Guinea-Bissau,28,1,21,2.5
 Guyana,9,2,1,7.1
 Haiti,1,26,1,5.9
-Honduras,69,98,2,
+Honduras,69,98,2,0
 Hungary,24,215,185,11
 Iceland,2,61,78,6.6
 India,9,114,0,2.2
@@ -122,7 +122,7 @@ Nepal,5,6,0,0.2
 Netherlands,251,88,190,9.4
 New Zealand,20,79,175,9
 Nicaragua,78,118,1,0.5
-Niger,,2,1,0.1
+Niger,0,2,1,0.1
 Nigeria,42,5,2,9.1
 Niue,188,200,7,7
 Norway,169,71,129,6.7
@@ -174,7 +174,7 @@ Timor-Leste,1,1,4,0.1
 Togo,6,2,19,1
 Tonga,6,21,5,1.1
 Trinidad & Tobago,197,156,7,6.4
-Tunisia,51,,20,1
+Tunisia,51,0,20,1
 Turkey,51,22,7,1.4
 Turkmenistan,19,71,2,2.2
 Tuvalu,6,41,9,1
@@ -187,7 +187,7 @@ USA,249,158,84,8.7
 Uruguay,115,5,220,6.6
 Uzbekistan,25,101,8,2.4
 Vanuatu,21,18,11,0.9
-Venezuela,,100,0,7.7
+Venezuela,0,100,0,7.7
 Vietnam,111,2,1,2
 Yemen,6,0,0,0.1
 Zambia,2,19,4,2.5
