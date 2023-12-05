@@ -53,20 +53,26 @@ def create_3d_scatter(df, highlight_country=None):
     
     layout = go.Layout(
         title='3D Scatter Plot of Alcohol Consumption by Country',
-        scene=dict(xaxis_title='Beer Servings', yaxis_title='Spirit Servings', zaxis_title='Wine Servings'),
-        margin=dict(l=0, r=0, b=0, t=0)
+        scene=dict(
+            xaxis_title='Beer Servings',
+            yaxis_title='Spirit Servings',
+            zaxis_title='Wine Servings'
+        ),
+        margin=dict(l=0, r=0, b=0, t=30)
     )
     
     fig = go.Figure(data=traces, layout=layout)
+    fig.update_layout(height=600)  # Adjust the height of the plot if necessary
     return fig
 
 # Streamlit application layout
 st.title("Alcohol Consumption Clustering")
 
-# Dropdown for dataset selection
+# Sidebar for controls
+st.sidebar.title("Controls")
 selected_dataset_name = st.sidebar.selectbox('Choose a dataset', ('drinks', 'drinks_without_3'))
 
-# Depending on the selected dataset, load it
+# Load the data
 data = load_data(f'{selected_dataset_name}.csv')
 
 # Perform K-Means clustering on the selected dataset
@@ -82,11 +88,11 @@ selected_country = st.sidebar.selectbox('Select a country to highlight', ['None'
 # If a country is selected, pass it to the create_3d_scatter function to highlight it
 fig = create_3d_scatter(visualization_data, highlight_country=selected_country if selected_country != 'None' else None)
 
-# Layout for displaying dataset and plot side by side
-col1, col2 = st.columns(2)
+# Layout for displaying dataset and plot
+col1, col2 = st.columns([1, 2])  # Adjust the ratio between the dataset and the plot
 with col1:
     st.write(f"Displaying dataset: {selected_dataset_name}")
-    st.dataframe(data)
+    st.dataframe(data.style.highlight_max(axis=0), height=600)  # Adjust the height of the dataframe if necessary
 
 with col2:
     st.write(f"3D Scatter Plot for {selected_dataset_name}")
